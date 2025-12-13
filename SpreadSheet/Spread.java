@@ -2,7 +2,7 @@ package SpreadSheet;
 import java.util.ArrayList;
 
 public class Spread{
-    private ArrayList<String> col;
+    private final ArrayList<String> col;
 
     /**
      * Create a spread object, each row should be a String
@@ -50,6 +50,7 @@ public class Spread{
             return null;
         }
     }
+
 
     @SuppressWarnings({ "Unchecked", "unchecked" })
     public ArrayList<String> get(){

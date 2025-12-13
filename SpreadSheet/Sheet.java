@@ -1,12 +1,11 @@
 package SpreadSheet;
 import java.util.ArrayList;
-import java.lang.Iterable;
 
 public class Sheet {
     // Title of the SpreadSheet
     private String title;
     // Content of the Spread Sheet
-    private ArrayList<Spread> Contents;
+    private final ArrayList<Spread> Contents;
 
     /**
      * Creates a sheet object
@@ -22,6 +21,21 @@ public class Sheet {
         }
     }
 
+    public Sheet(String title, String[][] conts) throws Exception{
+        this.title = title;
+        this.Contents = new ArrayList<>();
+
+        for(String curr: conts[0]){
+            this.Contents.add(new Spread(curr));
+        }
+
+        for(int row=1; row < conts.length; row++){
+            for(int col=0; col < conts[row].length; col++){
+                this.Contents.get(col).append(conts[row][col]);
+            }
+        }
+    }
+
 
 
     public Sheet(String title, String[] titles){
@@ -33,8 +47,16 @@ public class Sheet {
         }
     }
 
+    /**
+     * Creates a new <Sheet> using <matrix<String>>;
+     * @param title <String>
+     * @param titles <String[]>
+     * @param conts <String[][]>
+     * @throws Exception
+     */
     public Sheet(String title, String[] titles, String[][] conts) throws Exception{
         this.Contents = new ArrayList<Spread>();
+        this.title = title;
         if(titles.length != conts.length) throw new Exception("Different dimensions");
         for(String curr: titles){
             this.Contents.add(new Spread(curr));
@@ -44,8 +66,17 @@ public class Sheet {
         }
     }
 
+
+    /**
+     * Creates a new <Sheet> using <matrix<String>> but with a Iterable<String> title;
+     * @param title <String>
+     * @param titles <Iterable<String>>
+     * @param conts <String[][]>
+     * @throws Exception
+     */
     public Sheet(String title, Iterable<String> titles, String[][] conts) throws Exception{
         int count = 0;
+        this.title = title;
         this.Contents = new ArrayList<Spread>();
         for(String curr: titles){
             count++;
@@ -56,19 +87,6 @@ public class Sheet {
             this.addRow(curr);
         }
     }
-
-    /*
-    public Sheet(String title, Iterable<String> titles, Iterable<Iterable<String>> conts) throws Exception{
-        if(titles.size() != conts.length) throw new Exception("Different dimensions");
-        for(String curr: titles){
-            this.Contents.add(new Spread(curr));
-        }
-        for(Iterable<String> curr : conts){
-            this.addRow(curr);
-        }
-    }
-     */
-
 
 
     /**
@@ -85,6 +103,14 @@ public class Sheet {
      */
     public String Title(){
         return this.title;
+    }
+
+    /**
+     * Gets the numbers of row
+     * @return
+     */
+    public int size(){
+        return this.Contents.size();
     }
 
     /**
@@ -117,7 +143,11 @@ public class Sheet {
     }
 
 
-
+    /**
+     * Gets the row of <int> index
+     * @param index<int>
+     * @return rows<String[]>
+     */
     public String[] row(int index){
         Spread curr = this.Contents.get(index);
         String[] rows = new String[curr.size()];
@@ -127,6 +157,25 @@ public class Sheet {
         }
         return rows;
     }
+    /**
+     * Gets the Column as a <Spread>
+     * @param index<int>
+     * @return <Spread>
+     */
+    public Spread colSpread(int index){
+        return this.Contents.get(index);
+    }
+
+
+    /**
+     * Gets the Column as a <String[]>
+     * @param index
+     * @return <String[]>
+     */
+    public String[] col(int index){
+        return this.Contents.get(index).get().toArray(new String[0]);
+    }
+
 
 
     public void addRow(String... args){
@@ -137,6 +186,22 @@ public class Sheet {
         for(int col=0;col < this.Contents.size(); col++){
             this.Contents.get(col).append(args[col]);
         }
+    }
+
+    public void addRow(Iterable<String> args) throws Exception{
+        int size = 0, count = 0;
+        // Safety matters
+        for(String arg: args){
+            size++;
+        }
+        if(size != this.Contents.size()) throw new Exception("Dimension doesn't match");
+        else if(size == 0) throw new IndexOutOfBoundsException("The Iterable is not initialized");
+
+        for(String arg: args){
+            this.Contents.get(count).append(arg);
+            count++;
+        }
+        
     }
 
 
@@ -153,10 +218,19 @@ public class Sheet {
         
     }
 
+    /**
+     * Converts <Sheet>this into a string
+     * @return <String>this
+     */
     @Override
     public String toString(){
         String result = this.title + "\n";
-        
+        for (String word : this.Titles()) {
+            for(int i=0;i< word.length() + 2;i++){
+                result += "-";
+            }
+        }
+        result += "\n";
         for(int row = 0; row < this.max(); row++){
             for(int col = 0; col < this.Contents.size(); col++){
                 result += this.Contents.get(col).get(row);
@@ -165,9 +239,34 @@ public class Sheet {
                     result += ", ";
                 }
             }
-            if(row < (this.max() - 1))
+            if(row < (this.max() ))
                 result += "\n";
         }
+        //result += "\n";
+        for (String word : this.Titles()) {
+            for(int i=0;i< word.length() + 2;i++){
+                result += "-";
+            }
+        }
+        result += "\n";
+
+        return result;
+    }
+
+    public static String toString(Sheet curr){
+
+        String result = curr.Title();
+        Spread ts;
+        for (String word : curr.Titles()) {
+            for(int i=0;i< word.length() + 2;i++){
+                result += "=";
+            }
+        }
+
+    
+
+
+        
 
         return result;
     }
