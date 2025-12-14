@@ -48,6 +48,28 @@ public class Main {
                 }
             }
         }
+        String[][] page1 =  {
+                                {"Name", "DOB", "ID"},
+                                {"Peter Parker", "08/10/2001", "552808061"},
+                                {"Bruce Banner", "12/18/1969", "239487392"},
+                                {"America Chavez", "07/04/2006", "616360975"}
+                            };
+        
+        String[][] page2 =  {
+                                {"Hero", "ThreatLevel", "Notes"},
+                                {"Spider-man", "8-B", "Be careful if he ever stops talking."},
+                                {"The Hulk", "4-B", "Much more docile as of late; still maintain caution when engaging. Avoid engagement all-together if possible."},
+                                {"Ms. America", "2-C", "Insufficient Data."}
+                            };
+        
+        //Test Your Class Here:
+        String[][][] pages = {page1, page2};
+        SpreadSheets heroes = new SpreadSheets(pages);
+        
+        
+        for(int i=0; i<heroes.length(); i++){
+            System.out.println(heroes.page(i));
+        }
     }
 
 }
